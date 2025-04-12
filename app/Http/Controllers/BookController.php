@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Book;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+
+class BookController extends Controller
+{
+  public function index()
+  {
+    return Inertia::render('Books/Index', [
+      'books' => Book::latest()->get(),
+    ]);
+  }
+
+  public function create()
+  {
+    return Inertia::render('Books/Create');
+  }
+
+  public function store(Request $request)
+  {
+    $validated = $request->validate([
+      'name' => 'required|string|max:255',
+      'description' => 'nullable|string',
+      'quantity' => 'required|integer|min:0',
+    ]);
+
+    Book::create($validated);
+
+    return redirect()->route('books.index')->with('success', 'Book created.');
+  }
+
+  public function edit(Book $book)
+  {
+    return Inertia::render('Books/Edit', [
+      'book' => $book,
+    ]);
+  }
+
+  public function update(Request $request, Book $book)
+  {
+    $validated = $request->validate([
+      'name' => 'required|string|max:255',
+      'description' => 'nullable|string',
+      'quantity' => 'required|integer|min:0',
+    ]);
+
+    $book->update($validated);
+
+    return redirect()->route('books.index')->with('success', 'Book updated.');
+  }
+
+  public function destroy(Book $book)
+  {
+    $book->delete();
+
+    return redirect()->route('books.index')->with('success', 'Book deleted.');
+  }
+}
