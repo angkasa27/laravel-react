@@ -53,7 +53,7 @@ export default function Create() {
                 <button
                     type="submit"
                     disabled={processing}
-                    className="mt-4 bg-green-600 text-white px-4 py-2 rounded"
+                    className="mt-4 bg-green-600 text-white px-4 py-2 rounded cursor-pointer disabled:opacity-50 disabled:cursor-default"
                 >
                     Save
                 </button>
