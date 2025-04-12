@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBookRequest;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,20 +21,11 @@ class BookController extends Controller
     return Inertia::render('Books/Create');
   }
 
-  public function store(Request $request)
+  public function store(StoreBookRequest $request)
   {
-    $validated = $request->validate([
-      'name' => 'required|string|max:255',
-      'description' => 'nullable|string',
-      'quantity' => [
-        'required',
-        'regex:/^(0|[1-9][0-9]*)$/',
-      ],
-    ]);
+    Book::create($request->validated());
 
-    Book::create($validated);
-
-    return redirect()->route('books.index')->with('success', 'Book created.');
+    return redirect()->route('books.index')->with('success', 'Book created!');
   }
 
   public function edit(Book $book)
