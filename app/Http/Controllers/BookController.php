@@ -9,10 +9,10 @@ use Inertia\Inertia;
 
 class BookController extends Controller
 {
-  public function index()
+  public function index(Request $request)
   {
     return Inertia::render('Books/Index', [
-      'books' => Book::latest()->get(),
+      'books' => Book::where('created_by', $request->user()->id)->latest()->get(),
     ]);
   }
 
@@ -23,7 +23,10 @@ class BookController extends Controller
 
   public function store(StoreBookRequest $request)
   {
-    Book::create($request->validated());
+    Book::create([
+      ...$request->validated(),
+      'created_by' => $request->user()->id,
+    ]);
 
     return redirect()->route('books.index')->with('success', 'Book created!');
   }
