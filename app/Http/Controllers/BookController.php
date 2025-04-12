@@ -25,7 +25,10 @@ class BookController extends Controller
     $validated = $request->validate([
       'name' => 'required|string|max:255',
       'description' => 'nullable|string',
-      'quantity' => 'required|integer|min:0',
+      'quantity' => [
+        'required',
+        'regex:/^(0|[1-9][0-9]*)$/',
+      ],
     ]);
 
     Book::create($validated);
@@ -45,7 +48,10 @@ class BookController extends Controller
     $validated = $request->validate([
       'name' => 'required|string|max:255',
       'description' => 'nullable|string',
-      'quantity' => 'required|integer|min:0',
+      'quantity' => [
+        'required',
+        'regex:/^(0|[1-9][0-9]*)$/',
+      ],
     ]);
 
     $book->update($validated);
