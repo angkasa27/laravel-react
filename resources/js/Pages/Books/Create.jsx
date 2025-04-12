@@ -4,13 +4,12 @@ export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
         name: "",
         description: "",
-        quantity: null,
+        quantity: "",
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
         post("/books");
-        console.log("submit");
     };
 
     return (
