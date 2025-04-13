@@ -1,4 +1,6 @@
 import { useForm } from "@inertiajs/react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head } from "@inertiajs/react";
 
 export default function Create() {
     const { data, setData, put, processing, errors } = useForm({

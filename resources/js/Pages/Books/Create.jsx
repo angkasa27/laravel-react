@@ -1,4 +1,6 @@
 import { useForm } from "@inertiajs/react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head } from "@inertiajs/react";
 
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
@@ -13,9 +15,16 @@ export default function Create() {
     };
 
     return (
-        <div className="p-6">
-            <h1 className="text-2xl mb-4">Create Book</h1>
-            <form onSubmit={handleSubmit}>
+        <AuthenticatedLayout
+            header={
+                <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                    Create Book
+                </h2>
+            }
+        >
+            <Head title="Create Book" />
+
+            <form onSubmit={handleSubmit} className="p-6">
                 <div>
                     <label>Name:</label>
                     <br />
@@ -58,6 +67,6 @@ export default function Create() {
                     Save
                 </button>
             </form>
-        </div>
+        </AuthenticatedLayout>
     );
 }
