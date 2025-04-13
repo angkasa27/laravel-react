@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,6 +28,13 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
   Route::resource('books', BookController::class);
+});
+
+
+Route::middleware('auth')->group(function () {
+  Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+  Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+  Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
 });
 
 require __DIR__ . '/auth.php';

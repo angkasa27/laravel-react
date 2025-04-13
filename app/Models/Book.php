@@ -44,4 +44,9 @@ class Book extends Model
   {
     return $this->belongsTo(User::class, 'updated_by');
   }
+
+  public function categories()
+  {
+    return $this->belongsToMany(Category::class, 'book_category', 'book_id', 'category_id');
+  }
 }
