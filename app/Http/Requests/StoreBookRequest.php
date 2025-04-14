@@ -24,6 +24,8 @@ class StoreBookRequest extends FormRequest
         'required',
         'regex:/^(0|[1-9][0-9]*)$/',
       ],
+      'categories'   => 'nullable|array',
+      'categories.*' => 'exists:categories,id',
     ];
   }
 

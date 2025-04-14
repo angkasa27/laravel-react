@@ -14,7 +14,6 @@ export default function Index({ books }) {
             <Head title="Books" />
 
             <div className="p-6">
-                {" "}
                 <Link
                     href="/books/create"
                     className="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block"
@@ -33,9 +32,26 @@ export default function Index({ books }) {
                             >
                                 Edit
                             </Link>
+                            <Link
+                                href={`/books/${book.id}`}
+                                method="delete"
+                                as="button"
+                                className="text-red-600 ml-4"
+                                onClick={(e) => {
+                                    if (
+                                        !confirm(
+                                            "Are you sure you want to delete this book?"
+                                        )
+                                    ) {
+                                        e.preventDefault();
+                                    }
+                                }}
+                            >
+                                Delete
+                            </Link>
                         </li>
                     ))}
-                </ul>{" "}
+                </ul>
             </div>
         </AuthenticatedLayout>
     );

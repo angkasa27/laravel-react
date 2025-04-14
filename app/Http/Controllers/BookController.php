@@ -44,25 +44,31 @@ class BookController extends Controller
 
   public function edit(Book $book)
   {
+    // Eager load the categories relationship.
+    $book->load('categories');
+    // Also, pass all available categories for selection.
+    $categories = Category::orderBy('name')->get();
+
     return Inertia::render('Books/Edit', [
       'book' => $book,
+      'categories' => $categories,
     ]);
   }
 
-  public function update(Request $request, Book $book)
+  public function update(StoreBookRequest $request, Book $book)
   {
-    $validated = $request->validate([
-      'name' => 'required|string|max:255',
-      'description' => 'nullable|string',
-      'quantity' => [
-        'required',
-        'regex:/^(0|[1-9][0-9]*)$/',
-      ],
-    ]);
+    // Validate using StoreBookRequest and update the book
+    $book->update($request->validated());
 
-    $book->update($validated);
+    // Sync the categories pivot: if categories are provided, update them, otherwise clear the pivot.
+    if ($request->has('categories')) {
+      $book->categories()->sync($request->input('categories'));
+    } else {
+      $book->categories()->sync([]);
+    }
 
-    return redirect()->route('books.index')->with('success', 'Book updated.');
+    return redirect()->route('books.index')
+      ->with('success', 'Book updated.');
   }
 
   public function destroy(Book $book)
