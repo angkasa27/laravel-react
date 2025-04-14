@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBookRequest;
 use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -18,15 +19,25 @@ class BookController extends Controller
 
   public function create()
   {
-    return Inertia::render('Books/Create');
+    // Pass all categories to the view
+    $categories = Category::orderBy('name')->get();
+    return Inertia::render('Books/Create', [
+      'categories' => $categories,
+    ]);
   }
 
   public function store(StoreBookRequest $request)
   {
-    Book::create([
+    // Create the book using validated data and assign created_by from the current user.
+    $book = Book::create([
       ...$request->validated(),
       'created_by' => $request->user()->id,
     ]);
+
+    // If categories were selected, sync them into the pivot table.
+    if ($request->has('categories')) {
+      $book->categories()->sync($request->input('categories'));
+    }
 
     return redirect()->route('books.index')->with('success', 'Book created!');
   }

@@ -2,16 +2,28 @@ import { useForm } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
-export default function Create() {
+export default function Create({ categories }) {
     const { data, setData, post, processing, errors } = useForm({
         name: "",
         description: "",
         quantity: "",
+        categories: [],
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
         post("/books");
+    };
+
+    const handleCategoryChange = (e, categoryId) => {
+        if (e.target.checked) {
+            setData("categories", [...data.categories, categoryId]);
+        } else {
+            setData(
+                "categories",
+                data.categories.filter((id) => id !== categoryId)
+            );
+        }
     };
 
     return (
@@ -57,6 +69,32 @@ export default function Create() {
                     />
                     {errors.quantity && (
                         <div className="text-red-500">{errors.quantity}</div>
+                    )}
+                </div>
+                <div>
+                    <label>Categories:</label>
+                    <br />
+                    {categories &&
+                        categories.map((category) => (
+                            <div
+                                key={category.id}
+                                className="flex items-center space-x-2"
+                            >
+                                <input
+                                    type="checkbox"
+                                    value={category.id}
+                                    checked={data.categories.includes(
+                                        category.id
+                                    )}
+                                    onChange={(e) =>
+                                        handleCategoryChange(e, category.id)
+                                    }
+                                />
+                                <span>{category.name}</span>
+                            </div>
+                        ))}
+                    {errors.categories && (
+                        <div className="text-red-500">{errors.categories}</div>
                     )}
                 </div>
                 <button
